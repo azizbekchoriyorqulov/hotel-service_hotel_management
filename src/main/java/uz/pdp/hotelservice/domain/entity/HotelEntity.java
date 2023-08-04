@@ -1,35 +1,26 @@
 package uz.pdp.hotelservice.domain.entity;
 
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Map;
 
 @Entity
-@Table(name = "location")
+@Table(name = "hotel")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class HotelEntity extends BaseEntity{
     private String name;
     private String about;
 
-    /**
-     * String > room size, Integer amount
-     * example:  1 bed: 20
-     */
     @ElementCollection // not sure whether works or not
     private Map<String, Integer> size;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private LocationEntity location;
 
     private int stars;
