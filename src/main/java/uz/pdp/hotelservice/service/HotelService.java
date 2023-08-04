@@ -14,6 +14,7 @@ import uz.pdp.hotelservice.exeption.DuplicateDataException;
 import uz.pdp.hotelservice.repository.HotelRepository;
 import uz.pdp.hotelservice.repository.LocationRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -52,12 +53,18 @@ public class HotelService {
             newHotel.setName(hotel.getName());
         if (newHotel.getLocation() == null)
             newHotel.setLocation(hotel.getLocation());
-        modelMapper.map(newHotel,hotel);
+        modelMapper.map(newHotel,HotelEntity.class);
        return hotelRepository.save(newHotel);
 
     }
     public void  deleteByName(String name){
         hotelRepository.delete(hotelRepository.findByName(name).orElseThrow(()-> new DataNotFoundException("hotel not found by name")));
+    }
+    public List<HotelEntity> getHotelsInRadius(LocationEntity location, double radiusInKm) {
+        Double latitude = location.getLatitude();
+        Double longitude = location.getLongitude();
+        List<HotelEntity> hotelsInRadius = hotelRepository.findHotelsInRadius(latitude, longitude, radiusInKm).orElseThrow(()->new DataNotFoundException("bu radiusda hotellar mavjud emas"));
+        return hotelsInRadius;
     }
 
 }
